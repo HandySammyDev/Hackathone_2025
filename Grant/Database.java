@@ -1,3 +1,5 @@
+package Grant;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
@@ -45,7 +47,7 @@ public class Database<User extends ObjEncodable>
 
     public void saveUsers() throws FileNotFoundException
     {
-        for(Map.Entry<UserLoginInfo,User> entry : loadedUsers.entrySet())
+        for(Entry<UserLoginInfo,User> entry : loadedUsers.entrySet())
         {
             saveEntry(entry);
         }
@@ -53,7 +55,7 @@ public class Database<User extends ObjEncodable>
     public void saveUser(User object) throws FileNotFoundException
     {
 
-        for(Map.Entry<UserLoginInfo,User> entry : loadedUsers.entrySet())
+        for(Entry<UserLoginInfo,User> entry : loadedUsers.entrySet())
         {
             if(entry.getValue().equals(object))
             {
@@ -62,6 +64,19 @@ public class Database<User extends ObjEncodable>
             }
 
         }
+    }
+
+    public String getUsername(User object)
+    {
+
+        for(Entry<UserLoginInfo,User> entry : loadedUsers.entrySet())
+        {
+            if(entry.getValue().equals(object))
+            {
+                return entry.getKey().getUsername();
+            }
+        }
+        return null;
     }
     public <M extends ObjDecoder<User>> User loadUser(String fileName, M userDecoder) throws FileNotFoundException
     {
