@@ -1,4 +1,4 @@
-package database;
+package main;
 
 import java.util.ArrayList;
 
@@ -88,5 +88,60 @@ public class Task {
         currentStatus = i;
         return true;
     }
+
+    //Serialize
+
+    public String serialize() {
+        int i;
+        String cereal = "Name:" + name;
+        cereal += "," + "statusAmount:" + statusAmount;
+        cereal += "," + "currentStatus:" + currentStatus + ",";
+        cereal += "statuses:";
+
+        for(i = 0; i < statusAmount; ++i) {
+            if(i == statusAmount - 1) {
+                cereal += statuses.get(i);
+            }
+            else {
+                cereal +=  statuses.get(i) + "*";
+            }
+        }
+
+        return cereal;
+    }
+
+    public static class TaskDecoder implements ObjDecoder<Task>
+    {
+        public Task deserialize(String data)
+        {
+            String[] split = data.split(",(?=(?:[^{}]*\\{[^{}]*\\})*[^{}]*$)");
+            String name = null;
+            ArrayList<String> statuses = new ArrayList<>();
+            int statusAmount=-1;
+            int currentStatus = 0;
+            for(String str : split)
+            {
+
+
+                String[] args = str.split(":");
+                if(args[0].equals("name"))
+                    name = args[1];
+                else if(args[0].equals("statusAmount"))
+                    statusAmount = Integer.parseInt(args[1]);
+                else if(args[0].equals("currentStatus"))
+                    currentStatus = Integer.parseInt(args[1]);
+                else if(args[0].equals("statuses"))
+                {
+                    for(String stat : args[1].split("\\*"))
+                    {
+                        statuses.add(stat);
+                    }
+                }
+            }
+            return new Task(name,statuses);
+        }
+
+    }
+
 
 }

@@ -1,5 +1,3 @@
-package database;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
@@ -62,6 +60,17 @@ public class Database<User extends ObjEncodable>
         {
             saveEntry(entry);
         }
+    }
+    public User getUserFromUsername(String username)
+    {
+        for(Entry<UserLoginInfo,User> entry : loadedUsers.entrySet())
+        {
+            if(entry.getKey().getUsername().equals(username))
+            {
+                return entry.getValue();
+            }
+        }
+        return null;
     }
     public void saveUser(User object) throws FileNotFoundException
     {

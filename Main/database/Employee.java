@@ -153,10 +153,82 @@ public class Employee implements ObjEncodable {
 
     @Override
     public String serialize() {
-        return "";
+        String inf =  String.format("id:%d,salary:%.2f,name:%s,address:%s,dateofhire:%s,dateofbirth:%s,department:%s,role:%s,",id,salary,name,adress,dateOfHire,dateOfBirth,department,role);
+        StringBuilder taskList = new StringBuilder("tasks:{");
+        for(Map.Entry<String,Task> entry: tasks.entrySet())
+        {
+            taskList.append(entry.getKey()+":{"+entry.getValue().serialize()+"},");
+        }
+        inf+="}"+taskList.substring(0,taskList.length()-1);
+        return inf;
     }
 
-    //
+    public static class EmployeeDecoder implements ObjDecoder<Employee>
+    {
+        public Employee deserialize(String data)
+        {
+            String[] vars = data.split(",(?=(?:[^{}]*\\{[^{}]*\\})*[^{}]*$)");
+            int id=-1;
+            double salary=-1;
+            String name=null;
+            String address=null;
+            String dateofhire=null;
+            String dateofbirth=null;
+            String department=null;
+            String role=null;
+            HashMap<String,Task> tasks = new HashMap<>();
+
+            for(String text : vars)
+            {
+                String[] splitted = text.split(":(?=(?:[^{}]*\\{[^{}]*\\})*[^{}]*$)");
+                if(splitted[0].equals("name"))
+                {
+                    name = splitted[1];
+                }
+                if(splitted[0].equals("id"))
+                {
+                    id = Integer.parseInt(splitted[1]);
+                }
+                else if(splitted[0].equals("salary"))
+                {
+                    salary = Double.parseDouble(splitted[1]);
+                }
+                else if(splitted[0].equals("address"))
+                {
+                    address = splitted[1];
+                }
+                else if(splitted[0].equals("dateofhire"))
+                {
+                    dateofhire = splitted[1];
+                }
+                else if(splitted[0].equals("dateofbirth"))
+                {
+                    dateofbirth = splitted[1];
+                }
+                else if(splitted[0].equals("department"))
+                {
+                    department = splitted[1];
+                }
+                else if(splitted[0].equals("role"))
+                {
+                    role = splitted[1];
+                }
+                else if(splitted[0].equals("tasks"))
+                {
+                    for(String str : splitted[1].substring(0,splitted[1].length()-1).split(",(?=(?:[^{}]*\\{[^{}]*\\})*[^{}]*$)"))
+                    {
+                        String[] keyTask = str.split(":(?=(?:[^{}]*\\{[^{}]*\\})*[^{}]*$)");
+                        String key = keyTask[0];
+                        Task t = (new TaskDecoder()).deserialize(keyTask[1].substring(0,keyTask[1].length()-1));
+                        tasks.put(key,t);
+                    }
+                }
+
+            }
+            return new Employee(id,salary,name,address,dateofhire,dateofbirth,department,role,tasks);
+        }
+    }
+
 
 
 }
