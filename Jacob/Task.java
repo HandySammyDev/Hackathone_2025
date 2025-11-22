@@ -7,13 +7,21 @@ public class Task {
     private String name;
     private ArrayList<String> statuses = new ArrayList<>();
     private int statusAmount;
-    private int currentStatus = 0;
-    private boolean isDone = false;
+    private int currentStatus;
+
 
     public Task(String name, ArrayList<String> statuses){
-        this.name = name;
+        this(name);
         this.statuses = statuses;
         statusAmount = statuses.size();
+        currentStatus = 0;
+    }
+
+    public Task(String name){
+        this.name = name;
+        statuses.add("Open");
+        statuses.add("In-Progress");
+        statuses.add("Complete");
     }
 
     public String getName() {
@@ -32,6 +40,7 @@ public class Task {
         return statuses;
     }
 
+
     //Notes if status is contained
 
     public boolean isStatusPresent(String status) {
@@ -47,18 +56,10 @@ public class Task {
     protected boolean updateStatus(String statusName) {
         int i;
 
-        if(isDone == true) {
-            return false;
-        }
-
         for(i = 0; i < statusAmount; ++i) {
+
             if(statusName.equals(statuses.get(i))) {
                 currentStatus = i;
-                if(currentStatus == statusAmount - 1) {
-                    isDone = true;
-                    return true;
-
-                }
                 return true;
             }
         }
@@ -67,20 +68,25 @@ public class Task {
 
     protected boolean updateStatus() {
 
-        if(isDone == true) {
+
+        if(currentStatus >= statusAmount - 1) {
             return false;
         }
 
         currentStatus += 1;
 
-        if(currentStatus == statusAmount - 1) {
-            isDone = true;
-        }
-
         return true;
     }
 
+    protected boolean updateStatus(int i) {
 
 
+        if((i < 0) || (i >= this.statusAmount - 1)) {
+            return false;
+        }
+
+        currentStatus = i;
+        return true;
+    }
 
 }

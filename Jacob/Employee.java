@@ -1,7 +1,8 @@
 package main;
 
-import java.util.ArrayList;
+
 import java.util.HashMap;
+import java.util.HashSet;
 
 public class Employee {
     //Essential Fields
@@ -15,11 +16,10 @@ public class Employee {
     private String dateOfBirth;
     private String department;
     private String role;
-    private int userLevel;
 
     //Lists contained by Employee
     private HashMap<String, Task> tasks = new HashMap<>();
-    private ArrayList<Group> groupReferences = new ArrayList<>();
+    private HashSet<Group> groupReferences = new HashSet<>();
 
     //Constructors
 
@@ -31,7 +31,7 @@ public class Employee {
     }
 
     public Employee(int id, double salary, String name, String adress,
-                     String dateOfHire, String dateOfBirth, String department, String role) {
+                     String dateOfHire, String dateOfBirth, String department, String role, int userLevel) {
 
         this(id, salary, name, adress);
         this.dateOfHire = dateOfHire;
@@ -86,6 +86,10 @@ public class Employee {
 
     }
 
+    public HashSet<Group> getGroupReferences() {
+        return groupReferences;
+    }
+
     //adds taks
     public boolean addTask(Task t) {
         if(tasks.containsValue(t)) {
@@ -98,6 +102,7 @@ public class Employee {
     //update task, returns a boolean if occured
 
     public boolean updateTask(Task task, String status) {
+
         if(!tasks.containsValue(task)) {
             return false;
         }
@@ -119,4 +124,34 @@ public class Employee {
 
         return task.updateStatus();
     }
+
+    public boolean updateTask(Task task, int i) {
+        if(!tasks.containsValue(task)) {
+            return false;
+        }
+
+        return task.updateStatus(i);
+    }
+
+    //removal and addition of groups and tasks
+
+    public boolean addGroup(Group g) {
+        return groupReferences.add(g);
+    }
+
+    public boolean removeGroup(Group g) {
+        if(!groupReferences.contains(g)) {
+            return false;
+        }
+        groupReferences.remove(g);
+        return true;
+    }
+
+    protected void removeTask(Task t) {
+        tasks.remove(t.getName());
+    }
+
+    //
+
+
 }
