@@ -34,12 +34,13 @@ public class Database<User extends ObjEncodable>
         this.databaseFolder = Paths.get(databaseFolder);
     }
 
-    public static void main(String[] args)
-    {
-        Database<ObjEncodable> db = new Database<>("Tacos");
+    public static void main(String[] args) throws FileNotFoundException {
+        Database<ObjEncodable> db = new Database<>("");
         UserLoginInfo login = new UserLoginInfo("Grant","1254");
 
         System.out.println(login.serialize());
+
+        System.out.println(db.checkLogin((new Scanner(new File("Grant.rec"))).nextLine(),"Grant","1254"));
     }
 
 
@@ -132,14 +133,14 @@ public class Database<User extends ObjEncodable>
     private static class UserLoginInfo implements ObjEncodable
     {
         private final String username;
-        private final byte[] passHash;
+        private final String passHash;
 
         public UserLoginInfo(String username, String password)
         {
-            this(username,globalHasher.digest(password.getBytes(StandardCharsets.UTF_8)));
+            this(username,new String(globalHasher.digest(password.getBytes(StandardCharsets.UTF_8)),StandardCharsets.UTF_8),true);
         }
 
-        public UserLoginInfo(String username, byte[] passHash)
+        public UserLoginInfo(String username, String passHash, boolean isHashed)
         {
             this.username = username;
             this.passHash = passHash;
@@ -148,7 +149,8 @@ public class Database<User extends ObjEncodable>
 
         public boolean equals(UserLoginInfo o)
         {
-            return o.username.equals(username) && Arrays.equals(passHash,o.passHash);
+            System.out.println(passHash + " " + o.passHash);
+            return o.username.equals(username) && passHash.equals(o.passHash);
         }
 
         public String getUsername()
@@ -158,13 +160,13 @@ public class Database<User extends ObjEncodable>
 
         public String getPassHash()
         {
-            return new String(passHash, StandardCharsets.UTF_8);
+            return passHash;
         }
 
 
         public int hashCode()
         {
-            return username.hashCode() + Arrays.hashCode(passHash);
+            return username.hashCode() + passHash.hashCode();
         }
 
         public String serialize()
@@ -196,7 +198,8 @@ public class Database<User extends ObjEncodable>
                 {
                     throw(new IllegalArgumentException("Data does not contain all parameters"));
                 }
-                return new UserLoginInfo(username,passHash.getBytes(StandardCharsets.UTF_8));
+                System.out.println(username + " " + passHash);
+                return new UserLoginInfo(username,passHash,true);
             }
         }
     }
