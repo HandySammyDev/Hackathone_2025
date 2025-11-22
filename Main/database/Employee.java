@@ -3,6 +3,7 @@ package database;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
 public class Employee implements ObjEncodable {
     //Essential Fields
@@ -31,7 +32,7 @@ public class Employee implements ObjEncodable {
     }
 
     public Employee(int id, double salary, String name, String adress,
-                     String dateOfHire, String dateOfBirth, String department, String role) {
+                    String dateOfHire, String dateOfBirth, String department, String role) {
 
         this(id, salary, name, adress);
         this.dateOfHire = dateOfHire;
@@ -39,6 +40,13 @@ public class Employee implements ObjEncodable {
         this.department = department;
         this.role = role;
 
+    }
+
+    public Employee(int id, double salary, String name, String adress,
+                    String dateOfHire, String dateOfBirth, String department, String role, HashMap<String, Task> tasks)
+    {
+        this(id,salary,name,adress,dateOfHire,dateOfBirth,department,role);
+        this.tasks = tasks;
     }
 
     //getters
@@ -219,7 +227,7 @@ public class Employee implements ObjEncodable {
                     {
                         String[] keyTask = str.split(":(?=(?:[^{}]*\\{[^{}]*\\})*[^{}]*$)");
                         String key = keyTask[0];
-                        Task t = (new TaskDecoder()).deserialize(keyTask[1].substring(0,keyTask[1].length()-1));
+                        Task t = (new Task.TaskDecoder()).deserialize(keyTask[1].substring(0,keyTask[1].length()-1));
                         tasks.put(key,t);
                     }
                 }

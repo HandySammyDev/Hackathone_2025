@@ -110,7 +110,7 @@ public class UserGroup implements ObjEncodable
                         // Here, we'll assume that we have a way to get Employee objects by username.
                         // Since loginDB is null, you could either mock this or assume Employee objects are passed.
                         // We will leave this part empty for now and assume Employee constructor is public.
-                        employees.add(loginDB.getFromUsername(username)); // This is a placeholder
+                        employees.add(loginDB.getUserFromUsername(username)); // This is a placeholder
                     }
                 } else if (part.startsWith("tasks:")) {
                     // Extract tasks
@@ -125,7 +125,7 @@ public class UserGroup implements ObjEncodable
                             String taskName = taskParts[0];
                             String taskSerialization = taskParts[1];
                             // Deserialize the task object (assuming Task has a `deserialize` method)
-                            Task task = (new TaskDecoder()).deserialize(taskSerialization);
+                            Task task = (new Task.TaskDecoder()).deserialize(taskSerialization);
                             taskMap.put(taskName, task);
                         }
                     }

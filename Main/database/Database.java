@@ -1,3 +1,5 @@
+package database;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
@@ -35,12 +37,15 @@ public class Database<User extends ObjEncodable>
     }
 
     public static void main(String[] args) throws FileNotFoundException {
-        Database<ObjEncodable> db = new Database<>("");
-        UserLoginInfo login = new UserLoginInfo("Grant","1254");
+        Database<Employee> db = new Database<>("login");
 
-        System.out.println(login.serialize());
+        db.addUser(new Employee(2,2,"grant","2520EEEE"),"Grant","1254");
+        System.out.println(db.loadedUsers);
 
-        System.out.println(db.checkLogin((new Scanner(new File("Grant.rec"))).nextLine(),"Grant","1254"));
+        Employee e = db.login("Grant","1254");
+        System.out.println(e);
+
+        db.saveUser(e);
     }
 
 
