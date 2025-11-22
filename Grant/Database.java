@@ -182,7 +182,7 @@ public class Database<User extends ObjEncodable>
                 String username=null;
                 String passHash=null;
 
-                for(String inst : data.split(","))
+                for(String inst : data.split(",(?=(?:[^{}]*\\{[^{}]*\\})*[^{}]*$)"))
                 {
                     String[] split = inst.split(":");
                     if(split[0].equals("username"))
