@@ -40,6 +40,11 @@ public class UserGroup implements ObjEncodable
         e.removeGroup(this);
     }
 
+    public void removeTask(Task t)
+    {
+        taskMap.remove(t.getName());
+    }
+
     public boolean updateTask(String taskName, String status)
     {
         Task t = taskMap.get(taskName);

@@ -4,7 +4,7 @@ package main;
 import java.util.HashMap;
 import java.util.HashSet;
 
-public class Employee {
+public class Employee implements ObjEncodable {
     //Essential Fields
     private int id;
     private double salary;
@@ -19,7 +19,7 @@ public class Employee {
 
     //Lists contained by Employee
     private HashMap<String, Task> tasks = new HashMap<>();
-    private HashSet<Group> groupReferences = new HashSet<>();
+    private HashSet<UserGroup> groupReferences = new HashSet<>();
 
     //Constructors
 
@@ -86,7 +86,7 @@ public class Employee {
 
     }
 
-    public HashSet<Group> getGroupReferences() {
+    public HashSet<UserGroup> getGroupReferences() {
         return groupReferences;
     }
 
@@ -135,11 +135,11 @@ public class Employee {
 
     //removal and addition of groups and tasks
 
-    public boolean addGroup(Group g) {
+    public boolean addGroup(UserGroup g) {
         return groupReferences.add(g);
     }
 
-    public boolean removeGroup(Group g) {
+    public boolean removeGroup(UserGroup g) {
         if(!groupReferences.contains(g)) {
             return false;
         }
@@ -149,6 +149,11 @@ public class Employee {
 
     protected void removeTask(Task t) {
         tasks.remove(t.getName());
+    }
+
+    @Override
+    public String serialize() {
+        return "";
     }
 
     //
