@@ -6,7 +6,7 @@ import java.util.HashSet;
 public class EmployeeManager {
     HashMap<String, UserGroup> systemGroups = new HashMap<>();
     HashMap<String, Employee> systemEmployees = new HashMap<>();
-    
+    HashMap<String, Task> currentTasks = new HashMap<>();
     //adders
 
     public void addUserGroup(UserGroup g) {
@@ -25,6 +25,23 @@ public class EmployeeManager {
         }
 
         return false;
+    }
+
+    public boolean createCurrentTask(Task t) {
+        currentTasks.put(t.getName(), t);
+        return true;
+    }
+
+    public HashMap<String, Employee> getSystemEmployees() {
+        return systemEmployees;
+    }
+
+    public HashMap<String, Task> getCurrentTasks() {
+        return currentTasks;
+    }
+
+    public HashMap<String, UserGroup> getSystemGroups() {
+        return systemGroups;
     }
 
     public boolean addTaskCustomStatusesEmployee(Employee user, Employee e, Task t) {
@@ -78,6 +95,24 @@ public class EmployeeManager {
         }
 
         e.removeTask(t);
+        return true;
+    }
+
+    public Boolean removeTaskGroup(Employee user, UserGroup g, Task t) {
+        if(!systemEmployees.containsValue(user)) {
+            return false;
+        }
+
+        if(!systemEmployees.containsValue(g)) {
+            return false;
+        }
+
+        HashSet<UserGroup> mainGroups = user.getGroupReferences();
+        if(!checkViability(mainGroups)) {
+            return false;
+        }
+
+        g.removeTask(t);
         return true;
     }
 
