@@ -1,7 +1,5 @@
-package Grant;
-
-import Main.Employee;
-import Main.Task;
+//import Main.Employee;
+//import Main.Task;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -22,6 +20,8 @@ public class UserGroup implements ObjEncodable
         this.emps = emps;
         this.taskMap = taskMap;
     }
+
+
 
 
     public void addEmployee(Employee e)

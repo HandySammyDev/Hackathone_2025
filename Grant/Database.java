@@ -1,5 +1,3 @@
-package Grant;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
@@ -27,6 +25,7 @@ public class Database<User extends ObjEncodable>
         }
     }
 
+
     private final HashMap<UserLoginInfo,User> loadedUsers;
     private final Path databaseFolder;
 
@@ -34,6 +33,15 @@ public class Database<User extends ObjEncodable>
         this.loadedUsers = new HashMap<>();
         this.databaseFolder = Paths.get(databaseFolder);
     }
+
+    public static void main(String[] args)
+    {
+        Database<ObjEncodable> db = new Database<>("Tacos");
+        UserLoginInfo login = new UserLoginInfo("Grant","1254");
+
+        System.out.println(login.serialize());
+    }
+
 
     public User login(String username, String password)
     {
