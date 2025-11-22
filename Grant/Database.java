@@ -122,6 +122,13 @@ public class Database<User extends ObjEncodable>
         }
     }
 
+    public boolean checkLogin(String data,String username, String password)
+    {
+        UserLoginInfo decoded = (new UserLoginInfo.UserLoginInfoDecoder()).deserialize(data);
+        UserLoginInfo checked = new UserLoginInfo(username, password);
+        return decoded.equals(checked);
+    }
+
     private static class UserLoginInfo implements ObjEncodable
     {
         private final String username;
