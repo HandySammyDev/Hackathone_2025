@@ -89,4 +89,25 @@ public class Task {
         return true;
     }
 
+    //Serialize
+
+    public String serialize() {
+        int i;
+        String cereal = "Name:" + name;
+        cereal += "," + "statusAmount:" + statusAmount;
+        cereal += "," + "currentStatus:" + currentStatus + ",";
+        cereal += "statuses:";
+
+        for(i = 0; i < statusAmount; ++i) {
+            if(i == statusAmount - 1) {
+                cereal += statuses.get(i);
+            }
+            else {
+                cereal +=  statuses.get(i) + "*";
+            }
+        }
+
+        return cereal;
+    }
+
 }
