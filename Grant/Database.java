@@ -91,7 +91,7 @@ public class Database<User extends ObjEncodable>
         File filePath = databaseFolder.resolve(fileName).toFile();
         User user;
         UserLoginInfo login;
-        try(Scanner scan = new Scanner(fileName))
+        try(Scanner scan = new Scanner(filePath))
         {
             String[] userdata = scan.nextLine().split("_NEXT_");
             login = (new UserLoginInfo.UserLoginInfoDecoder()).deserialize(userdata[0]);
@@ -136,9 +136,15 @@ public class Database<User extends ObjEncodable>
 
         public UserLoginInfo(String username, String password)
         {
-            this.username = username;
-            this.passHash = globalHasher.digest(password.getBytes());
+            this(username,globalHasher.digest(password.getBytes(StandardCharsets.UTF_8)));
         }
+
+        public UserLoginInfo(String username, byte[] passHash)
+        {
+            this.username = username;
+            this.passHash = passHash;
+        }
+
 
         public boolean equals(UserLoginInfo o)
         {
@@ -190,7 +196,7 @@ public class Database<User extends ObjEncodable>
                 {
                     throw(new IllegalArgumentException("Data does not contain all parameters"));
                 }
-                return new UserLoginInfo(username,passHash);
+                return new UserLoginInfo(username,passHash.getBytes(StandardCharsets.UTF_8));
             }
         }
     }
